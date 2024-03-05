@@ -45,6 +45,7 @@
             label6 = new Label();
             label7 = new Label();
             label8 = new Label();
+            applyButton = new Button();
             SuspendLayout();
             // 
             // listBox1
@@ -60,7 +61,7 @@
             // studentOrInstructorBox
             // 
             studentOrInstructorBox.FormattingEnabled = true;
-            studentOrInstructorBox.Location = new Point(222, 79);
+            studentOrInstructorBox.Location = new Point(155, 73);
             studentOrInstructorBox.Margin = new Padding(2, 1, 2, 1);
             studentOrInstructorBox.Name = "studentOrInstructorBox";
             studentOrInstructorBox.Size = new Size(132, 23);
@@ -70,16 +71,17 @@
             // yearBox
             // 
             yearBox.FormattingEnabled = true;
-            yearBox.Location = new Point(406, 79);
+            yearBox.Location = new Point(339, 73);
             yearBox.Margin = new Padding(2, 1, 2, 1);
             yearBox.Name = "yearBox";
             yearBox.Size = new Size(132, 23);
             yearBox.TabIndex = 2;
+            yearBox.SelectedIndexChanged += yearBox_SelectedIndexChanged;
             // 
             // semesterBox
             // 
             semesterBox.FormattingEnabled = true;
-            semesterBox.Location = new Point(590, 79);
+            semesterBox.Location = new Point(523, 73);
             semesterBox.Margin = new Padding(2, 1, 2, 1);
             semesterBox.Name = "semesterBox";
             semesterBox.Size = new Size(132, 23);
@@ -88,7 +90,7 @@
             // majorBox
             // 
             majorBox.FormattingEnabled = true;
-            majorBox.Location = new Point(774, 79);
+            majorBox.Location = new Point(707, 73);
             majorBox.Margin = new Padding(2, 1, 2, 1);
             majorBox.Name = "majorBox";
             majorBox.Size = new Size(132, 23);
@@ -97,7 +99,7 @@
             // genderBox
             // 
             genderBox.FormattingEnabled = true;
-            genderBox.Location = new Point(774, 145);
+            genderBox.Location = new Point(707, 139);
             genderBox.Margin = new Padding(2, 1, 2, 1);
             genderBox.Name = "genderBox";
             genderBox.Size = new Size(132, 23);
@@ -106,7 +108,7 @@
             // facultyBox
             // 
             facultyBox.FormattingEnabled = true;
-            facultyBox.Location = new Point(590, 145);
+            facultyBox.Location = new Point(523, 139);
             facultyBox.Margin = new Padding(2, 1, 2, 1);
             facultyBox.Name = "facultyBox";
             facultyBox.Size = new Size(132, 23);
@@ -115,7 +117,7 @@
             // departmentBox
             // 
             departmentBox.FormattingEnabled = true;
-            departmentBox.Location = new Point(406, 145);
+            departmentBox.Location = new Point(339, 139);
             departmentBox.Margin = new Padding(2, 1, 2, 1);
             departmentBox.Name = "departmentBox";
             departmentBox.Size = new Size(132, 23);
@@ -124,7 +126,7 @@
             // universityBox
             // 
             universityBox.FormattingEnabled = true;
-            universityBox.Location = new Point(222, 145);
+            universityBox.Location = new Point(155, 139);
             universityBox.Margin = new Padding(2, 1, 2, 1);
             universityBox.Name = "universityBox";
             universityBox.Size = new Size(132, 23);
@@ -133,7 +135,7 @@
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(222, 63);
+            label1.Location = new Point(155, 57);
             label1.Name = "label1";
             label1.Size = new Size(116, 15);
             label1.TabIndex = 10;
@@ -142,7 +144,7 @@
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(406, 63);
+            label2.Location = new Point(339, 57);
             label2.Name = "label2";
             label2.Size = new Size(29, 15);
             label2.TabIndex = 11;
@@ -151,7 +153,7 @@
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(590, 63);
+            label3.Location = new Point(523, 57);
             label3.Name = "label3";
             label3.Size = new Size(55, 15);
             label3.TabIndex = 12;
@@ -160,7 +162,7 @@
             // label4
             // 
             label4.AutoSize = true;
-            label4.Location = new Point(774, 63);
+            label4.Location = new Point(707, 57);
             label4.Name = "label4";
             label4.Size = new Size(38, 15);
             label4.TabIndex = 13;
@@ -169,7 +171,7 @@
             // label5
             // 
             label5.AutoSize = true;
-            label5.Location = new Point(222, 129);
+            label5.Location = new Point(155, 123);
             label5.Name = "label5";
             label5.Size = new Size(59, 15);
             label5.TabIndex = 14;
@@ -178,7 +180,7 @@
             // label6
             // 
             label6.AutoSize = true;
-            label6.Location = new Point(406, 129);
+            label6.Location = new Point(339, 123);
             label6.Name = "label6";
             label6.Size = new Size(70, 15);
             label6.TabIndex = 15;
@@ -187,7 +189,7 @@
             // label7
             // 
             label7.AutoSize = true;
-            label7.Location = new Point(590, 129);
+            label7.Location = new Point(523, 123);
             label7.Name = "label7";
             label7.Size = new Size(45, 15);
             label7.TabIndex = 16;
@@ -197,17 +199,28 @@
             // label8
             // 
             label8.AutoSize = true;
-            label8.Location = new Point(774, 129);
+            label8.Location = new Point(707, 123);
             label8.Name = "label8";
             label8.Size = new Size(45, 15);
             label8.TabIndex = 17;
             label8.Text = "Gender";
+            // 
+            // applyButton
+            // 
+            applyButton.Location = new Point(891, 106);
+            applyButton.Name = "applyButton";
+            applyButton.Size = new Size(75, 23);
+            applyButton.TabIndex = 18;
+            applyButton.Text = "Apply Filters";
+            applyButton.UseVisualStyleBackColor = true;
+            applyButton.Click += applyButton_Click;
             // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1107, 544);
+            Controls.Add(applyButton);
             Controls.Add(label8);
             Controls.Add(label7);
             Controls.Add(label6);
@@ -240,7 +253,6 @@
         private ComboBox semesterBox;
         private ComboBox majorBox;
         private ComboBox genderBox;
-        private ComboBox genderBox;
         private ComboBox facultyBox;
         private ComboBox departmentBox;
         private ComboBox universityBox;
@@ -252,5 +264,6 @@
         private Label label6;
         private Label label7;
         private Label label8;
+        private Button applyButton;
     }
 }
