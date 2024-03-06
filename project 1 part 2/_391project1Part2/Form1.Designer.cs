@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            listBox1 = new ListBox();
+            //listBox1 = new ListBox();
             studentOrInstructorBox = new ComboBox();
             yearBox = new ComboBox();
             semesterBox = new ComboBox();
@@ -47,16 +47,7 @@
             label8 = new Label();
             applyButton = new Button();
             SuspendLayout();
-            // 
-            // listBox1
-            // 
-            listBox1.FormattingEnabled = true;
-            listBox1.ItemHeight = 15;
-            listBox1.Location = new Point(195, 200);
-            listBox1.Margin = new Padding(2, 1, 2, 1);
-            listBox1.Name = "listBox1";
-            listBox1.Size = new Size(738, 334);
-            listBox1.TabIndex = 0;
+            
             // 
             // studentOrInstructorBox
             // 
@@ -237,17 +228,43 @@
             Controls.Add(semesterBox);
             Controls.Add(yearBox);
             Controls.Add(studentOrInstructorBox);
-            Controls.Add(listBox1);
+            //Controls.Add(listBox1);
             Margin = new Padding(2, 1, 2, 1);
             Name = "Form1";
             Text = "Form1";
             ResumeLayout(false);
             PerformLayout();
+
+            // Data Grid View
+            this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridView1.Location = new System.Drawing.Point(195, 200);
+            this.dataGridView1.Name = "dataGridView1";
+            this.dataGridView1.Size = new System.Drawing.Size(800, 334);
+            this.dataGridView1.TabIndex = 0;
+            this.Controls.Add(this.dataGridView1);
+            this.dataGridView1.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellDoubleClick);
+
+            // drillDownButton
+            this.drillDownButton = new System.Windows.Forms.Button();
+            this.drillDownButton.Text = "Drill Down";
+            this.drillDownButton.Location = new System.Drawing.Point(10, 370);
+            this.drillDownButton.Click += new System.EventHandler(this.drillDownButton_Click);
+
+            // rollUpButton
+            this.rollUpButton = new System.Windows.Forms.Button();
+            this.rollUpButton.Text = "Roll Up";
+            this.rollUpButton.Location = new System.Drawing.Point(100, 370);
+            this.rollUpButton.Click += new System.EventHandler(this.rollUpButton_Click);
+
+            this.Controls.Add(this.drillDownButton);
+            this.Controls.Add(this.rollUpButton);
+
         }
 
         #endregion
 
-        private ListBox listBox1;
+        //private ListBox listBox1;
         private ComboBox studentOrInstructorBox;
         private ComboBox yearBox;
         private ComboBox semesterBox;
@@ -265,5 +282,7 @@
         private Label label7;
         private Label label8;
         private Button applyButton;
+        private Button drillDownButton;
+        private Button rollUpButton;
     }
 }
