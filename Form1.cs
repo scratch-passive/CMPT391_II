@@ -12,11 +12,46 @@ namespace _391project1Part2
     using System.Windows.Forms;
     using static System.Net.Mime.MediaTypeNames;
     using static System.Windows.Forms.VisualStyles.VisualStyleElement;
-    
-    
-    
-    
-    
+
+
+    // Connects to the SSMS server
+    public class DatabaseAccess
+    {
+        private string connectionString =
+            "Data Source = 206.75.31.209,11433; " +
+            "Initial Catalog = 391project1P2; " +
+            "User ID = mckenzy; " +
+            "Password = 123456; " +
+            "MultipleActiveResultSets = true;";
+
+        // Sends a query to the database and returns the result
+        public string ExecuteQuery(string query)
+        {
+            DataTable dataTable = new DataTable();
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+                SqlCommand command = new SqlCommand(query, con);
+
+                try
+                {
+                    con.Open();
+                    object result = command.ExecuteScalar();
+                    return result?.ToString() ?? "0";
+                }
+                catch (SqlException ex)
+                {
+                    Debug.WriteLine($"SQL ERROR: {ex.Message}");
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine($"Error: {ex.Message}");
+                }
+                return "0";
+            }
+        }
+    }
+
+
     public partial class Form1 : Form
     {
         private readonly string connectionString = "Data Source = 206.75.31.209,11433; " +
@@ -36,215 +71,121 @@ namespace _391project1Part2
             fillMajorBox();
             fillGenderBox();
             fillUniversityBox();
-            
-            
+
+
         }
 
         private void applyButton_Click(object sender, EventArgs e)
         {
-            
-            
+            string query0 = "";
+            string query1 = "";
+            string query2 = "";
+            string query3 = "";
+            string query = "";
 
-            
-
-
-            SqlConnection con = new SqlConnection(connectionString);
-            try
+            if (courseRadio.Checked)
             {
-                // Open the connection
 
-                //Debug.WriteLine("Connection successful!");
-
-
-                SqlCommand command = new SqlCommand("runQuery", con);
-                command.CommandType = CommandType.StoredProcedure;
-                command.Parameters.AddWithValue("@query", qu);
-                SqlDataReader myreader;
-                con.Open();
-                myreader = command.ExecuteReader();
-                Debug.WriteLine("Executed succesfully");
-
-                List<String> semester = new List<String>();
-                while (myreader.Read())
-                {
-                    semester.Add(myreader[0].ToString());
-                    Debug.WriteLine("reader: " + myreader[0].ToString());
-                }
-                for (int i = 0; i < semester.Count; i++)
-                {
-                    Debug.WriteLine("sem: " + semester[i]);
-                    listBox1.Items.Add(semester[i]);
-                }
-
-                // Close the connection
-                con.Close();
+                query1 = "SELECT COUNT(*) AS total ";
+                query2 = "FROM takes t, course c ";
+                query3 = "WHERE t.courseID = c.courseID "; // A dummy WHERE clause to simplify appending additional conditions
             }
-            catch (SqlException ex)
+            else if (studentRadio.Checked)
             {
-                Debug.WriteLine($"SQL ERROR: {ex.Message}");
+                query1 = "SELECT COUNT (*) AS total ";
+                query2 = "FROM takes t, student s ";
+                query3 = "WHERE t.studentID = s.studentID ";
             }
-            catch (Exception ex)
+            else if (InstructorRadio.Checked)
             {
-                Console.WriteLine($"Error: {ex.Message}");
+                query1 = "SELECT COUNT (*) AS total ";
+                query2 = "FROM takes t, student s ";
+                query3 = "WHERE t.studentID = s.studentID ";
             }
+
+
+            if (semesterBox.SelectedItem != null)
+            {
+                query0 += $"DECLARE @semester NVARCHAR(10) = '{semesterBox.SelectedItem.ToString()}' ";
+                query2 += $", date d ";
+                query3 += $" AND t.dateID = d.dateID and d.semester = @semester ";
+            }
+            if (facultyBox.SelectedItem != null)
+            {
+                query0 += $"DECLARE @faculty NVARCHAR(40) = '{facultyBox.SelectedItem.ToString()}' ";
+                query2 += $", course c1 ";
+                query3 += $" AND t.courseID = c1.courseID and c1.faculty = @faculty ";
+            }
+            if (universityBox.SelectedItem != null)
+            {
+                query0 += $"DECLARE @university NVARCHAR(60) = '{universityBox.SelectedItem.ToString()}' ";
+                query2 += $", course c2 ";
+                query3 += $" AND t.courseID = c2.courseID and c2.university = @university ";
+            }
+            if (majorBox.SelectedItem != null)
+            {
+                query0 += $"DECLARE @major NVARCHAR(40) = '{majorBox.SelectedItem.ToString()}' ";
+
+                query3 += $" AND major = @major ";
+            }
+            if (yearBox.SelectedItem != null)
+            {
+                query0 += $"DECLARE @year NCHAR(10) = {yearBox.SelectedItem.ToString()} ";
+                query2 += $", date d1 ";
+                query3 += $" AND t.dateID = d1.dateID and d1.year = @year ";
+            }
+            if (genderBox.SelectedItem != null)
+            {
+                query0 += $"DECLARE @gender NVARCHAR(10) = '{genderBox.SelectedItem.ToString()}' ";
+
+                query3 += $" AND gender = @gender ";
+            }
+            if (departmentBox.SelectedItem != null)
+            {
+                query0 += $"DECLARE @department VARCHAR(100) = '{departmentBox.SelectedItem.ToString()}' ";
+                query2 += $", course c3 ";
+                query3 += $" AND t.courseID = c3.courseID and c3.department = @department ";
+            }
+            if (query0 != "")
+            {
+                query = query0 + query1 + query2 + query3;
+                Debug.WriteLine(query);
+            }
+            else
+            {
+                query = query1 + query2 + query3;
+                Debug.WriteLine(query);
+            }
+
+            DatabaseAccess dbAccess = new DatabaseAccess();
+            string total = dbAccess.ExecuteQuery(query);
+            listBox1.Items.Clear();
+            listBox1.Items.Add($"Total: {total}");
+            Debug.WriteLine(total);
         }
 
-
+        private void clearButton_Click(object sender, EventArgs e)
+        {
+            semesterBox.SelectedIndex = -1;
+            facultyBox.SelectedIndex = -1;
+            universityBox.SelectedIndex = -1;
+            majorBox.SelectedIndex = -1;
+            yearBox.SelectedIndex = -1;
+            genderBox.SelectedIndex = -1;
+            departmentBox.SelectedIndex = -1;
+        }
 
 
         private void studentRadio_CheckedChanged(object sender, EventArgs e)
         {
-            string query0 = "DECLARE ";
-            string query1 = "SELECT COUNT (*) AS TotalStudents";
-            string query2 = "FROM takes t, student s";
-            string query3 = "WHERE t.studentID = s.studentID";
 
-            if (semesterBox.SelectedItem != null)
-            {
-                query0 += $"@semester NVARCHAR(10) = {semesterBox.SelectedItem.ToString()}";
-                query2 += $", date d";
-                query3 += $" AND t.dateID = d.dateID and semester = @semester";
-            }
-            else if (facultyBox.SelectedItem != null)
-            {
-                query0 += $"@faculty NVARCHAR(40) = {facultyBox.SelectedItem.ToString()}";
-                query2 += $", course c";
-                query3 += $" AND t.courseID = c.courseID and faculty = @faculty";
-            }
-            else if (universityBox.SelectedItem != null)
-            {
-                query0 += $"@university NVARCHAR(60) = {universityBox.SelectedItem.ToString()}";
-                query2 += $", course c";
-                query3 += $" AND t.courseID = c.courseID and university = @university";
-            }
-            else if (majorBox.SelectedItem != null)
-            {
-                query0 += $"@major NVARCHAR(40) = {majorBox.SelectedItem.ToString()}";
-                
-                query3 += $" AND major = @major";
-            }
-            else if (yearBox.SelectedItem != null)
-            {
-                query0 += $"@year NCHAR(10) = {yearBox.SelectedItem.ToString()}";
-                query2 += $", date d";
-                query3 += $" AND t.dateID = d.dateID and year = @year";
-            }
-            else if (genderBox.SelectedItem != null)
-            {
-                query0 += $"@gender NVARCHAR(10) = {genderBox.SelectedItem.ToString()}";
-
-                query3 += $" AND gender = @gender";
-            }
-            else if (departmentBox.SelectedItem != null)
-            {
-                query0 += $"@department VARCHAR(100) = {departmentBox.SelectedItem.ToString()}";
-                query2 += $", course c";
-                query3 += $" AND t.courseID = c.courseID and department = @department";
-            }
-            string query = query0 + query1 + query2 + query3;
         }
         private void courseRadio_CheckedChanged(object sender, EventArgs e)
         {
-            string query0 = "DECLARE ";
-            string query1 = "SELECT COUNT(*) AS TotalCourses ";
-            string query2 = "FROM course c ";
-            string query3 = "WHERE 1 = 1"; // A dummy WHERE clause to simplify appending additional conditions
 
-            if (semesterBox.SelectedItem != null)
-            {
-                query0 += $"@semester NVARCHAR(10) = {semesterBox.SelectedItem.ToString()}";
-                query2 += $", date d";
-                query3 += $" AND t.dateID = d.dateID and semester = @semester";
-            }
-            else if (facultyBox.SelectedItem != null)
-            {
-                query0 += $"@faculty NVARCHAR(40) = {facultyBox.SelectedItem.ToString()}";
-                query2 += $", course c";
-                query3 += $" AND t.courseID = c.courseID and faculty = @faculty";
-            }
-            else if (universityBox.SelectedItem != null)
-            {
-                query0 += $"@university NVARCHAR(60) = {universityBox.SelectedItem.ToString()}";
-                query2 += $", course c";
-                query3 += $" AND t.courseID = c.courseID and university = @university";
-            }
-            else if (majorBox.SelectedItem != null)
-            {
-                query0 += $"@major NVARCHAR(40) = {majorBox.SelectedItem.ToString()}";
-
-                query3 += $" AND major = @major";
-            }
-            else if (yearBox.SelectedItem != null)
-            {
-                query0 += $"@year NCHAR(10) = {yearBox.SelectedItem.ToString()}";
-                query2 += $", date d";
-                query3 += $" AND t.dateID = d.dateID and year = @year";
-            }
-            else if (genderBox.SelectedItem != null)
-            {
-                query0 += $"@gender NVARCHAR(10) = {genderBox.SelectedItem.ToString()}";
-
-                query3 += $" AND gender = @gender";
-            }
-            else if (departmentBox.SelectedItem != null)
-            {
-                query0 += $"@department VARCHAR(100) = {departmentBox.SelectedItem.ToString()}";
-                query2 += $", course c";
-                query3 += $" AND t.courseID = c.courseID and department = @department";
-            }
-
-            string query = query0 + query1 + query2 + query3;
         }
         private void InstructorRadio_CheckedChanged(object sender, EventArgs e)
         {
-            string query0 = "DECLARE ";
-            string query1 = "SELECT COUNT (*) AS TotalInstructors";
-            string query2 = "FROM takes t, student s";
-            string query3 = "WHERE t.studentID = s.studentID";
-
-            if (semesterBox.SelectedItem != null)
-            {
-                query0 += $"@semester NVARCHAR(10) = {semesterBox.SelectedItem.ToString()}";
-                query2 += $", date d";
-                query3 += $" AND t.dateID = d.dateID and semester = @semester";
-            }
-            else if (facultyBox.SelectedItem != null)
-            {
-                query0 += $"@faculty NVARCHAR(40) = {facultyBox.SelectedItem.ToString()}";
-                query2 += $", course c";
-                query3 += $" AND t.courseID = c.courseID and faculty = @faculty";
-            }
-            else if (universityBox.SelectedItem != null)
-            {
-                query0 += $"@university NVARCHAR(60) = {universityBox.SelectedItem.ToString()}";
-                query2 += $", course c";
-                query3 += $" AND t.courseID = c.courseID and university = @university";
-            }
-            else if (majorBox.SelectedItem != null)
-            {
-                query0 += $"@major NVARCHAR(40) = {majorBox.SelectedItem.ToString()}";
-
-                query3 += $" AND major = @major";
-            }
-            else if (yearBox.SelectedItem != null)
-            {
-                query0 += $"@year NCHAR(10) = {yearBox.SelectedItem.ToString()}";
-                query2 += $", date d";
-                query3 += $" AND t.dateID = d.dateID and year = @year";
-            }
-            else if (genderBox.SelectedItem != null)
-            {
-                query0 += $"@gender NVARCHAR(10) = {genderBox.SelectedItem.ToString()}";
-
-                query3 += $" AND gender = @gender";
-            }
-            else if (departmentBox.SelectedItem != null)
-            {
-                query0 += $"@department VARCHAR(100) = {departmentBox.SelectedItem.ToString()}";
-                query2 += $", course c";
-                query3 += $" AND t.courseID = c.courseID and department = @department";
-            }
-            string query = query0 + query1 + query2 + query3;
 
         }
 

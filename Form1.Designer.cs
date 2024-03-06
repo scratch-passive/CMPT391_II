@@ -187,6 +187,7 @@
             clearButton.TabIndex = 19;
             clearButton.Text = "Clear Filters";
             clearButton.UseVisualStyleBackColor = true;
+            clearButton.Click += clearButton_Click;
             // 
             // label9
             // 
