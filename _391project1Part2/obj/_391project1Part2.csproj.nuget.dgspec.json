@@ -1,0 +1,76 @@
+{
+  "format": 1,
+  "restore": {
+    "C:\\Users\\dayna\\OneDrive\\Documents\\Schoolwork\\CMPT\\391\\project1CMPT391_II\\Jackson\\project 1 part 2\\_391project1Part2\\_391project1Part2.csproj": {}
+  },
+  "projects": {
+    "C:\\Users\\dayna\\OneDrive\\Documents\\Schoolwork\\CMPT\\391\\project1CMPT391_II\\Jackson\\project 1 part 2\\_391project1Part2\\_391project1Part2.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\dayna\\OneDrive\\Documents\\Schoolwork\\CMPT\\391\\project1CMPT391_II\\Jackson\\project 1 part 2\\_391project1Part2\\_391project1Part2.csproj",
+        "projectName": "_391project1Part2",
+        "projectPath": "C:\\Users\\dayna\\OneDrive\\Documents\\Schoolwork\\CMPT\\391\\project1CMPT391_II\\Jackson\\project 1 part 2\\_391project1Part2\\_391project1Part2.csproj",
+        "packagesPath": "C:\\Users\\dayna\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\dayna\\OneDrive\\Documents\\Schoolwork\\CMPT\\391\\project1CMPT391_II\\Jackson\\project 1 part 2\\_391project1Part2\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\dayna\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net6.0-windows7.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net6.0-windows7.0": {
+            "targetAlias": "net6.0-windows7.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net6.0-windows7.0": {
+          "targetAlias": "net6.0-windows7.0",
+          "dependencies": {
+            "Microsoft.Data.SqlClient": {
+              "target": "Package",
+              "version": "[5.2.0, )"
+            },
+            "System.Data.SqlClient": {
+              "target": "Package",
+              "version": "[4.8.6, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            },
+            "Microsoft.WindowsDesktop.App.WindowsForms": {
+              "privateAssets": "none"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.302\\RuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}
