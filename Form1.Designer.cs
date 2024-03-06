@@ -1,4 +1,4 @@
-﻿namespace _391project1Part2
+namespace _391project1Part2
 {
     partial class Form1
     {
