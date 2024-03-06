@@ -12,6 +12,11 @@ namespace _391project1Part2
     using System.Windows.Forms;
     using static System.Net.Mime.MediaTypeNames;
     using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+    
+    
+    
+    
+    
     public partial class Form1 : Form
     {
         private readonly string connectionString = "Data Source = 206.75.31.209,11433; " +
@@ -19,15 +24,6 @@ namespace _391project1Part2
                     "User ID = mckenzy; " +
                     "Password = 123456; " +
                     "MultipleActiveResultSets = true;";
-
-        private int stuOrIns = -1;
-        private int sem = -1;
-        private int dept = -1;
-        private int fac = -1;
-        private int year = -1;
-        private int maj = -1;
-        private int gen = -1;
-        private int uni = -1;
 
 
         public Form1()
@@ -44,31 +40,12 @@ namespace _391project1Part2
             
         }
 
-        private void getBoxIndices()
-        {
-
-            sem = semesterBox.SelectedIndex;
-
-            fac = facultyBox.SelectedIndex;
-            year = yearBox.SelectedIndex;
-            maj = majorBox.SelectedIndex;
-            gen = genderBox.SelectedIndex;
-            uni = universityBox.SelectedIndex;
-        }
-
         private void applyButton_Click(object sender, EventArgs e)
         {
-            string qu = null;
-            getBoxIndices();
+            
+            
 
-            if (stuOrIns == 0)
-            {
-                qu = "select count(*) as num from takes T, student S where T.studentID = S.studentID";
-            }
-            else if (stuOrIns == 1)
-            {
-                qu = "select count(*) as num from takes T, instructor I where I.instructorID = T.instructorID";
-            }
+            
 
 
             SqlConnection con = new SqlConnection(connectionString);
@@ -124,25 +101,150 @@ namespace _391project1Part2
 
             if (semesterBox.SelectedItem != null)
             {
-                query0 += $"@semester = {semesterBox.SelectedItem.ToString()}";
-                query2 += $", course c";
-                query3 += $" AND t.courseID = c.courseID and semester = @semester";
+                query0 += $"@semester NVARCHAR(10) = {semesterBox.SelectedItem.ToString()}";
+                query2 += $", date d";
+                query3 += $" AND t.dateID = d.dateID and semester = @semester";
             }
             else if (facultyBox.SelectedItem != null)
             {
-                query0 += $"@faculty = {facultyBox.SelectedItem.ToString()}";
+                query0 += $"@faculty NVARCHAR(40) = {facultyBox.SelectedItem.ToString()}";
                 query2 += $", course c";
-                query3 += $" AND t.courseID = c.courseID and facukty = @faculty";
+                query3 += $" AND t.courseID = c.courseID and faculty = @faculty";
             }
+            else if (universityBox.SelectedItem != null)
+            {
+                query0 += $"@university NVARCHAR(60) = {universityBox.SelectedItem.ToString()}";
+                query2 += $", course c";
+                query3 += $" AND t.courseID = c.courseID and university = @university";
+            }
+            else if (majorBox.SelectedItem != null)
+            {
+                query0 += $"@major NVARCHAR(40) = {majorBox.SelectedItem.ToString()}";
+                
+                query3 += $" AND major = @major";
+            }
+            else if (yearBox.SelectedItem != null)
+            {
+                query0 += $"@year NCHAR(10) = {yearBox.SelectedItem.ToString()}";
+                query2 += $", date d";
+                query3 += $" AND t.dateID = d.dateID and year = @year";
+            }
+            else if (genderBox.SelectedItem != null)
+            {
+                query0 += $"@gender NVARCHAR(10) = {genderBox.SelectedItem.ToString()}";
 
+                query3 += $" AND gender = @gender";
+            }
+            else if (departmentBox.SelectedItem != null)
+            {
+                query0 += $"@department VARCHAR(100) = {departmentBox.SelectedItem.ToString()}";
+                query2 += $", course c";
+                query3 += $" AND t.courseID = c.courseID and department = @department";
+            }
+            string query = query0 + query1 + query2 + query3;
         }
         private void courseRadio_CheckedChanged(object sender, EventArgs e)
         {
+            string query0 = "DECLARE ";
+            string query1 = "SELECT COUNT(*) AS TotalCourses ";
+            string query2 = "FROM course c ";
+            string query3 = "WHERE 1 = 1"; // A dummy WHERE clause to simplify appending additional conditions
 
+            if (semesterBox.SelectedItem != null)
+            {
+                query0 += $"@semester NVARCHAR(10) = {semesterBox.SelectedItem.ToString()}";
+                query2 += $", date d";
+                query3 += $" AND t.dateID = d.dateID and semester = @semester";
+            }
+            else if (facultyBox.SelectedItem != null)
+            {
+                query0 += $"@faculty NVARCHAR(40) = {facultyBox.SelectedItem.ToString()}";
+                query2 += $", course c";
+                query3 += $" AND t.courseID = c.courseID and faculty = @faculty";
+            }
+            else if (universityBox.SelectedItem != null)
+            {
+                query0 += $"@university NVARCHAR(60) = {universityBox.SelectedItem.ToString()}";
+                query2 += $", course c";
+                query3 += $" AND t.courseID = c.courseID and university = @university";
+            }
+            else if (majorBox.SelectedItem != null)
+            {
+                query0 += $"@major NVARCHAR(40) = {majorBox.SelectedItem.ToString()}";
+
+                query3 += $" AND major = @major";
+            }
+            else if (yearBox.SelectedItem != null)
+            {
+                query0 += $"@year NCHAR(10) = {yearBox.SelectedItem.ToString()}";
+                query2 += $", date d";
+                query3 += $" AND t.dateID = d.dateID and year = @year";
+            }
+            else if (genderBox.SelectedItem != null)
+            {
+                query0 += $"@gender NVARCHAR(10) = {genderBox.SelectedItem.ToString()}";
+
+                query3 += $" AND gender = @gender";
+            }
+            else if (departmentBox.SelectedItem != null)
+            {
+                query0 += $"@department VARCHAR(100) = {departmentBox.SelectedItem.ToString()}";
+                query2 += $", course c";
+                query3 += $" AND t.courseID = c.courseID and department = @department";
+            }
+
+            string query = query0 + query1 + query2 + query3;
         }
-
         private void InstructorRadio_CheckedChanged(object sender, EventArgs e)
         {
+            string query0 = "DECLARE ";
+            string query1 = "SELECT COUNT (*) AS TotalInstructors";
+            string query2 = "FROM takes t, student s";
+            string query3 = "WHERE t.studentID = s.studentID";
+
+            if (semesterBox.SelectedItem != null)
+            {
+                query0 += $"@semester NVARCHAR(10) = {semesterBox.SelectedItem.ToString()}";
+                query2 += $", date d";
+                query3 += $" AND t.dateID = d.dateID and semester = @semester";
+            }
+            else if (facultyBox.SelectedItem != null)
+            {
+                query0 += $"@faculty NVARCHAR(40) = {facultyBox.SelectedItem.ToString()}";
+                query2 += $", course c";
+                query3 += $" AND t.courseID = c.courseID and faculty = @faculty";
+            }
+            else if (universityBox.SelectedItem != null)
+            {
+                query0 += $"@university NVARCHAR(60) = {universityBox.SelectedItem.ToString()}";
+                query2 += $", course c";
+                query3 += $" AND t.courseID = c.courseID and university = @university";
+            }
+            else if (majorBox.SelectedItem != null)
+            {
+                query0 += $"@major NVARCHAR(40) = {majorBox.SelectedItem.ToString()}";
+
+                query3 += $" AND major = @major";
+            }
+            else if (yearBox.SelectedItem != null)
+            {
+                query0 += $"@year NCHAR(10) = {yearBox.SelectedItem.ToString()}";
+                query2 += $", date d";
+                query3 += $" AND t.dateID = d.dateID and year = @year";
+            }
+            else if (genderBox.SelectedItem != null)
+            {
+                query0 += $"@gender NVARCHAR(10) = {genderBox.SelectedItem.ToString()}";
+
+                query3 += $" AND gender = @gender";
+            }
+            else if (departmentBox.SelectedItem != null)
+            {
+                query0 += $"@department VARCHAR(100) = {departmentBox.SelectedItem.ToString()}";
+                query2 += $", course c";
+                query3 += $" AND t.courseID = c.courseID and department = @department";
+            }
+            string query = query0 + query1 + query2 + query3;
 
         }
 
